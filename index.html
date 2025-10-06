@@ -868,12 +868,18 @@
       });
 
       // Service worker (BASE-säker registrering)
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          const BASE = window.__BASE_PATH__ || '/';
-          navigator.serviceWorker.register(`${BASE}service-worker.js`).catch(()=>{});
-        });
-      }
-    </script>
+<script>
+  // Registrera service worker (använder BASE från computeBase och cache-bust med ?v=2)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      const BASE = window.__BASE_PATH__ || '/';
+      navigator.serviceWorker
+        .register(`${BASE}service-worker.js?v=2`)
+        .catch(() => {});
+    });
+  }
+</script>
+
   </body>
 </html>
+
