@@ -873,7 +873,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          const BASE = window.__BASE_PATH__ || '/';
+          const BASE = '/PontusKop/';   // <- hårdkodat
           navigator.serviceWorker
             .register(`${BASE}service-worker.js?v=4`)  // bumpa vid uppdatering
             .catch(() => {});
@@ -882,6 +882,7 @@
     </script>
   </body>
 </html>
+
 
 
 
