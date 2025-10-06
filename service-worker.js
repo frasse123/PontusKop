@@ -1,8 +1,7 @@
-// service-worker.js  (failsafe för GitHub Pages under /SavedIT/)
-const SCOPE_PATH = new URL(self.registration.scope).pathname; // t.ex. '/SavedIT/'
-const CACHE_NAME = 'savedit-failsafe-v1';
+// service-worker.js
+const SCOPE_PATH = new URL(self.registration.scope).pathname; // t.ex. '/PontusKop/'
+const CACHE_NAME = 'savedit-failsafe-v2';
 
-// Saker vi förladdar (RELATIVA till scope)
 const PRECACHE = [
   'index.html',
   'manifest.webmanifest',
@@ -29,13 +28,10 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
-
-  // Bara GET, samma origin, och under vårt scope
   if (req.method !== 'GET') return;
   if (url.origin !== location.origin) return;
   if (!url.pathname.startsWith(SCOPE_PATH)) return;
 
-  // Navigering: nät först, fallback till cache:ad index.html
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req).catch(() => caches.match(SCOPE_PATH + 'index.html'))
@@ -43,7 +39,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Övrigt: cache först, annars nät -> cache (om OK)
   event.respondWith(
     caches.match(req).then(hit => {
       if (hit) return hit;
