@@ -849,37 +849,38 @@
       const root = ReactDOM.createRoot(document.getElementById("root"));
       root.render(<App />);
 
-      // Install (PWA)
-      let deferredPrompt;
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const btn = document.getElementById('installBtn');
-        if(btn){
-          btn.hidden = false;
-          btn.onclick = async () => {
-            btn.disabled = true;
-            await deferredPrompt.prompt();
-            await deferredPrompt.userChoice;
-            btn.hidden = true;
-            deferredPrompt = null;
-          };
-        }
-      });
-
-      // Service worker (BASE-säker registrering)
-<script>
-  // Registrera service worker (använder BASE från computeBase och cache-bust med ?v=2)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      const BASE = window.__BASE_PATH__ || '/';
-      navigator.serviceWorker
-        .register(`${BASE}service-worker.js?v=2`)
-        .catch(() => {});
+         …
+    // Install (PWA)
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('installBtn');
+      if(btn){
+        btn.hidden = false;
+        btn.onclick = async () => {
+          btn.disabled = true;
+          await deferredPrompt.prompt();
+          await deferredPrompt.userChoice;
+          btn.hidden = true;
+          deferredPrompt = null;
+        };
+      }
     });
-  }
-</script>
+  </script> <!-- ← STÄNG det här Babel-scriptet -->
 
-  </body>
+  <!-- Registrera service worker separat -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        const BASE = window.__BASE_PATH__ || '/';
+        navigator.serviceWorker
+          .register(`${BASE}service-worker.js?v=3`)   // bumpa vid ändringar
+          .catch(() => {});
+      });
+    }
+  </script>
+</body>
 </html>
+
 
